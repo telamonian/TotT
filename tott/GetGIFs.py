@@ -78,14 +78,54 @@ class GetGifInfo:
         """
         return [ item for sublist in nested_info for item in sublist ]
 
+    def get_image_info_all(self):
+        """
+        returns the image dictionary from Giphy API
+        will have all of the different formats of the images and their urls
+        """
+        image_dictionaries = []
+        for x in self.data['data']:
+            image_dictionaries.append(x['images'])
+        return image_dictionaries
+
+    def get_gif_url_original_size_all(self):
+        """
+        This will get all of urls for the gifs returned by the
+        query for the original size.
+        """
+        gif_url_all = []
+        for x in self.data['data']:
+            gif_url_all.append(x['images']['original']['url'])
+        return gif_url_all
+
+    def get_gif_url_original_size_some(self,line_num_list):
+        """
+        return some of the GIFs
+        the input must be a list of integers the list indexes
+        the output will be a list of the strings that are the URLs
+        """
+        gif_url_some = []
+        for x in line_num_list:
+            gif_url_some.append(self.data['data'][x]['images']['original']['url'])
+        return gif_url_some
+
+
+    def get_gif_url_original_size_one(self,line_num):
+        """
+        This will get all of urls for the gifs returned by the
+        query for the original size.
+        input one list index
+        """
+        return self.data['data'][line_num]['images']['original']['url']
+
 if __name__ == '__main__':
     def main1():
         test1 = GetGifInfo()
         query = test1.make_query_simple('snoopy')
         test1.get_json_object(query)
         #print test1.data['data']
-        word_cloud = test1.get_object_words_all()
-        print test1.flatten(word_cloud)
+        word_cloud = test1.get_gif_url_original_size_one(0)
+        print word_cloud
         return
 
     main1()

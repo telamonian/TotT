@@ -9,7 +9,7 @@ advantage of the API of the Memegenerator
 import urllib2
 import json
 
-class get_meme_info:
+class GetMemeInfo:
     def __init__(self):
         return
 
@@ -44,17 +44,28 @@ class get_meme_info:
         return
 
     def get_image_url_all(self):
-        return
-
-    def order_ranking(self,numbered_list):
-        return
+        """
+        returns a list of image urls ranking in the order of their
+        ranking on the meme generator
+        """
+        urls_and_rankings = []
+        for x in self.search_results:
+            rank = x['ranking']
+            url = x['imageUrl']
+            urls_and_rankings.append([rank,url])
+        urls_and_rankings.sort(key=lambda x: int(x[0]))
+        urls = []
+        for x in urls_and_rankings:
+            urls.append(x[1])
+        return urls
 
 if __name__ == '__main__':
     def main1():
-        test1 = get_meme_info()
+        test1 = GetMemeInfo()
         query = test1.make_query_simple('happy')
         test1.get_json_object(query)
-        for x in test1.search_results:
+        rankedurls = test1.get_image_url_all()
+        for x in rankedurls:
             print x
             #print
         return
