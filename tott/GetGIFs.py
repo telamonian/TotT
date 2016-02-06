@@ -82,6 +82,7 @@ class GetGifInfo:
         """
         returns the image dictionary from Giphy API
         will have all of the different formats of the images and their urls
+        list of dictionary of dictionaries
         """
         image_dictionaries = []
         for x in self.data['data']:
@@ -92,6 +93,7 @@ class GetGifInfo:
         """
         This will get all of urls for the gifs returned by the
         query for the original size.
+        output list of strings
         """
         gif_url_all = []
         for x in self.data['data']:
@@ -115,6 +117,7 @@ class GetGifInfo:
         This will get all of urls for the gifs returned by the
         query for the original size.
         input one list index
+        output one string
         """
         return self.data['data'][line_num]['images']['original']['url']
 

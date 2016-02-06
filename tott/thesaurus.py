@@ -1,4 +1,6 @@
-from collections import OrderedDict
+from collections import Counter, OrderedDict
+from itertools import chain
+import numpy as np
 
 class Container(object):
     def __contains__(self, key):
@@ -30,9 +32,11 @@ class ContainerSet(Container):
         return self.intersection(*others)
 
     def __rand__(self, *others):
-        return self.intersection(*others)
+        return set.intersection(*([self.getSet()] + [other for other in others]))
 
 class Thesaurus(Container):
+    depth = 3
+
     def __init__(self, fPath):
         with open(str(fPath)) as f:
             self.container = OrderedDict([(wordList[0], set(wordList[1:])) for wordList in [line.strip().split(',') for line in f]])
@@ -50,6 +54,25 @@ class Thesaurus(Container):
             cloud.append(Layer(*wordSets))
         return cloud
 
+    def getClouds(self, *queries, **kwargs):
+        depth = kwargs['depth'] if 'depth' in kwargs else self.depth
+
+        return [self.getCloud(query=query, depth=depth) for query in queries]
+
+    def getCounter(self, *queries, **kwargs):
+        depth = kwargs['depth'] if 'depth' in kwargs else self.depth
+        popQueries = kwargs['popQueries'] if 'popQueries' in kwargs else True
+
+        counter = np.sum([cloud.getCounter() for cloud in self.getClouds(*queries, depth=depth)])
+        if popQueries:
+            [counter.pop(query) for query in queries]
+        return counter
+
+    def getSet(self, *queries, **kwargs):
+        depth = kwargs['depth'] if 'depth' in kwargs else self.depth
+
+        return set.intersection(*[cloud.getSet() for cloud in self.getClouds(*queries, depth=depth)])
+
     def keys(self):
         return self.container.keys()
 
@@ -63,12 +86,21 @@ class Cloud(ContainerSet):
     def __init__(self, *layers):
         self.container = list(layers)
 
+    def getCounter(self):
+        return np.sum([container.getCounter() for container in self])
+
     def getSet(self):
         return set.union(*[container.getSet() for container in self])
+
+    def count(self, *others):
+        c = Counter(chain)
 
 class Layer(ContainerSet):
     def __init__(self, *wordSets):
         self.container = list(wordSets)
+
+    def getCounter(self):
+        return Counter(chain(*self))
 
     def getSet(self):
         return set.union(*self.container)
