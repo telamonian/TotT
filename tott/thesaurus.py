@@ -7,9 +7,9 @@ from container import ContainerDict, ContainerSet
 class Thesaurus(ContainerDict):
     depth = 3
 
-    def __init__(self, fPath, depth=None):
+    def __init__(self, fPath, active=True, depth=None):
         with open(str(fPath)) as f:
-            self.active = True
+            self.active = active
             self.container = OrderedDict([(wordList[0], set(wordList[1:])) for wordList in [line.strip().split(',') for line in f]])
             if depth is not None:
                 self.depth = depth
