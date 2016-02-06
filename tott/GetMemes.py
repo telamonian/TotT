@@ -36,7 +36,7 @@ class GetMemeInfo:
     def get_json_object(self,query):
         """
         Accepts a query to make a data object
-        returns a dictionary of results
+        creates a class object that is a dictionary of results
         """
         response = urllib2.urlopen(query)
         data = json.load(response)
@@ -59,14 +59,33 @@ class GetMemeInfo:
             urls.append(x[1])
         return urls
 
+    def get_image_name_all(self):
+        """
+        This will get the title of the images from the json object
+        output a list of strings
+         it will be in the same order as the urls
+        """
+        name_and_rankings = []
+        for x in self.search_results:
+            name =  x['displayName']
+            rank = x['ranking']
+            name_and_rankings.append([rank,name])
+        name_and_rankings.sort(key=lambda x: int(x[0]))
+        names = []
+        for x in name_and_rankings:
+            names.append(x[1])
+        return names
+
 if __name__ == '__main__':
     def main1():
         test1 = GetMemeInfo()
         query = test1.make_query_simple('happy')
         test1.get_json_object(query)
-        rankedurls = test1.get_image_url_all()
-        for x in rankedurls:
+        names = test1.get_image_url_all()
+        for x in names:
             print x
+ #       for x in rankedurls:
+#            print x
             #print
         return
 
