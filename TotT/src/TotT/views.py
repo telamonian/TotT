@@ -34,7 +34,7 @@ class SearchPage(generic.TemplateView):
         if words.is_valid():
             if self.search_type=="Gifs":
                 gif=GetGifInfo()
-                q=gif.make_query_simple(words.get_list()[0])
+                q=gif.make_query_complex(words.get_list())
                 gif.get_json_object(q)
                 imgDat=gif.get_gif_url_original_size_one(0)
                 return render(request, 'search.html', {'gif': imgDat, 'gifs': 1,})
