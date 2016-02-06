@@ -1,4 +1,7 @@
 # TotT: Tip of the Tongue
 
-Initial thesaurus is from [this](https://wiki.openoffice.org/wiki/Dictionaries).
-It can be partially found in `TotT\MyThes-1.0`.
+## Install (JRJ)
+ - Template is from http://django-edge.readthedocs.org/en/latest/
+ - Details are there, but I basically ran the startproject command with the template repo as an arg.
+ - ** pip install -r requirements.txt **
+ - ** python manage.py migrate **
