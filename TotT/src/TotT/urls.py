@@ -15,7 +15,7 @@ urlpatterns = [
     # added by JRJ
     url(r'^$', views.SearchPage.as_view(search_type="None"), name='search'),
     url(r'^searchGif/$', views.SearchPage.as_view(search_type="Gifs"), name='searchGif'),
-    url(r'^search/$', views.SearchPage.as_view(search_type="None"), name='search'),
+    url(r'^search/$', views.SearchPage.as_view(search_type="Normal"), name='search'),
 ]
 
 # User-uploaded files like profile pics need to be served in development
