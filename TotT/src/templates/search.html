@@ -101,10 +101,8 @@
       <div class="starter-template">
         <h1>What is it you're thinking of?</h1>
         <br>
-        {% if words %}
-         {% for i in words %}
-          <ul>{{ i }}</ul>
-         {% endfor %}
+        {% if gif %}
+         <img src="{{ gif }}" alt="gif">
         {% else %}
          {% if error_message %}<p>{{ error_message }}</p>{% endif %}
         <form class="form-inline" role="form" action="/search/" method="post">

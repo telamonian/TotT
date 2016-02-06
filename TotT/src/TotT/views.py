@@ -3,6 +3,8 @@ from django.shortcuts import render
 
 from .forms import WordForm
 
+from .GetGIFs import GetGifInfo
+
 
 class HomePage(generic.TemplateView):
     template_name = "home.html"
@@ -19,8 +21,11 @@ class SearchPage(generic.TemplateView):
     def post(self, request, *args, **kwargs):
         words = WordForm(request.POST)
         if words.is_valid():
-            #print(words)
-            return render(request, 'search.html', {'words': words.get_list(),})
+            gif=GetGifInfo()
+            q=gif.make_query_simple(words.get_list()[0])
+            gif.get_json_object(q)
+            imgDat=gif.get_gif_url_original_size_one(0)
+            return render(request, 'search.html', {'gif': imgDat,})
         else:
             return render(request, 'search.html', {'error_message': "Please type in some words",})
 '''
