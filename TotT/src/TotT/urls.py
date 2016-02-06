@@ -7,12 +7,13 @@ import accounts.urls
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.HomePage.as_view(), name='home'),
-    url(r'^about/$', views.AboutPage.as_view(), name='about'),
-    url(r'^users/', include(profiles.urls, namespace='profiles')),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include(accounts.urls, namespace='accounts')),
+    #url(r'^$', views.HomePage.as_view(), name='home'),
+    #url(r'^about/$', views.AboutPage.as_view(), name='about'),
+    #url(r'^users/', include(profiles.urls, namespace='profiles')),
+    #url(r'^admin/', include(admin.site.urls)),
+    #url(r'^', include(accounts.urls, namespace='accounts')),
     # added by JRJ
+    url(r'^$', views.SearchPage.as_view(search_type="None"), name='search'),
     url(r'^searchGif/$', views.SearchPage.as_view(search_type="Gifs"), name='searchGif'),
     url(r'^search/$', views.SearchPage.as_view(search_type="None"), name='search'),
 ]
