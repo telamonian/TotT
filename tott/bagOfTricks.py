@@ -6,10 +6,10 @@ from thesaurus import Thesaurus
 mobyThesaurusFPath = 'mthesaur.txt'
 
 class BagOfTricks(ContainerDict):
-    bagInits = ['initMobyThesaurus']
+    trickInits = ['initMobyThesaurus']
 
     def __init__(self, **kwargs):
-        self.container = {key: trick for key,trick in [self.__getattribute__(bagInit)(**kwargs) for bagInit in self.bagInits]}
+        self.container = {key: trick for key,trick in [self.__getattribute__(bagInit)(**kwargs) for bagInit in self.trickInits]}
 
     def initMobyThesaurus(self, **kwargs):
         return 'moby_thesaurus',Thesaurus(mobyThesaurusFPath, **kwargs)
