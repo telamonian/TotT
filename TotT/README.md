@@ -13,7 +13,7 @@ This project has the following basic apps:
 ## Installation
 
 ### Quick start
-
+_Not sure if this would work... I used python2_
 To set up a development environment quickly, first install Python 3. It
 comes with virtualenv built-in. So create a virtual env by:
 
