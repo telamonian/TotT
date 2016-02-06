@@ -2,44 +2,17 @@ from collections import Counter, OrderedDict
 from itertools import chain
 import numpy as np
 
-class Container(object):
-    def __contains__(self, key):
-        return key in self.container
+from container import ContainerDict, ContainerSet
 
-    def __getitem__(self, *keys):
-        if len(keys)<=1:
-            return self.container[keys[0]]
-        else:
-            return [self.container[key] for key in keys]
-
-    def __iter__(self):
-        return self.container.__iter__()
-
-    def __setitem__(self, key, value):
-        self.container[key] = value
-
-    def append(self, item):
-        self.container.append(item)
-
-class ContainerSet(Container):
-    def getSet(self):
-        pass
-
-    def intersection(self, *others):
-        return set.intersection(*([self.getSet()] + [other.getSet() for other in others]))
-
-    def __and__(self, *others):
-        return self.intersection(*others)
-
-    def __rand__(self, *others):
-        return set.intersection(*([self.getSet()] + [other for other in others]))
-
-class Thesaurus(Container):
+class Thesaurus(ContainerDict):
     depth = 3
 
-    def __init__(self, fPath):
+    def __init__(self, fPath, depth=None):
         with open(str(fPath)) as f:
+            self.active = True
             self.container = OrderedDict([(wordList[0], set(wordList[1:])) for wordList in [line.strip().split(',') for line in f]])
+            if depth is not None:
+                self.depth = depth
 
     def getCloud(self, query, depth=3):
         if depth < 1:
@@ -73,14 +46,8 @@ class Thesaurus(Container):
 
         return set.intersection(*[cloud.getSet() for cloud in self.getClouds(*queries, depth=depth)])
 
-    def keys(self):
-        return self.container.keys()
-
-    def items(self):
-        return self.container.items()
-
-    def values(self):
-        return self.container.values()
+    def setActive(self, active=True):
+        self.active = active
 
 class Cloud(ContainerSet):
     def __init__(self, *layers):
@@ -104,3 +71,14 @@ class Layer(ContainerSet):
 
     def getSet(self):
         return set.union(*self.container)
+
+if __name__=='__main__':
+    t = Thesaurus('mthesaur.txt')
+
+    words = ['happy',
+             'smile',
+             'lucky']
+
+    counter = t.getCounter(*words)
+    print counter.most_common(5)
+    # [('felicitous', 97), ('appropriate', 96), ('good', 92), ('fit', 90), ('fitting', 90)]
