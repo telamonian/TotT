@@ -4,7 +4,7 @@ __author__ = 'Henry'
 import urllib2
 import json
 
-class get_gif_info:
+class GetGifInfo:
     def __init__(self):
         return
 
@@ -80,7 +80,7 @@ class get_gif_info:
 
 if __name__ == '__main__':
     def main1():
-        test1 = get_gif_info()
+        test1 = GetGifInfo()
         query = test1.make_query_simple('snoopy')
         test1.get_json_object(query)
         #print test1.data['data']
