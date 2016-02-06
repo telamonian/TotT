@@ -3,6 +3,7 @@ __author__ = 'Henry'
 
 import urllib2
 import json
+from collections import Counter
 
 class GetGifInfo:
     def __init__(self):
@@ -121,14 +122,24 @@ class GetGifInfo:
         """
         return self.data['data'][line_num]['images']['original']['url']
 
+    def convert_list_to_counter_dictionary(self,flat_list):
+        cnt = Counter()
+        for word in flat_list:
+            cnt[word] += 1
+        return cnt
+
 if __name__ == '__main__':
     def main1():
         test1 = GetGifInfo()
-        query = test1.make_query_simple('snoopy')
+        query = test1.make_query_simple('happy')
         test1.get_json_object(query)
         #print test1.data['data']
-        word_cloud = test1.get_gif_url_original_size_one(0)
-        print word_cloud
+        word_cloud = test1.get_object_words_all()
+        word_list = test1.flatten(word_cloud)
+        word_counter = test1.convert_list_to_counter_dictionary(word_list)
+        for x in word_counter:
+            print x
+            print word_counter[x]
         return
 
     main1()
