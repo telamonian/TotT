@@ -101,9 +101,12 @@
       <div class="starter-template">
         <h1>What is it you're thinking of?</h1>
         <br>
-        {% if error_message %}<p>{{ error_message }}</p>
-        {% elif words %}<p>{{ words }}</p>
+        {% if words %}
+         {% for i in words %}
+          <ul>{{ i }}</ul>
+         {% endfor %}
         {% else %}
+         {% if error_message %}<p>{{ error_message }}</p>{% endif %}
         <form class="form-inline" role="form" action="/search/" method="post">
           {% csrf_token %}
           <div class="form-group">

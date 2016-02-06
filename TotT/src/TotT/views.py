@@ -20,9 +20,9 @@ class SearchPage(generic.TemplateView):
         words = WordForm(request.POST)
         if words.is_valid():
             #print(words)
-            return render(request, 'search.html', {'words': words.cleaned_data['sub_words'],})
+            return render(request, 'search.html', {'words': words.get_list(),})
         else:
-            return render(request, 'search.html', {'error_message': "Please type some words",})
+            return render(request, 'search.html', {'error_message': "Please type in some words",})
 '''
         #if(request.POST.get('search_thesaurus')):
             some_val = 'did it stick? {0}'.format(request.GET.get('search_words'))
