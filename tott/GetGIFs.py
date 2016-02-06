@@ -131,7 +131,7 @@ class GetGifInfo:
 if __name__ == '__main__':
     def main1():
         test1 = GetGifInfo()
-        query = test1.make_query_simple('happy')
+        query = test1.make_query_simple('mom')
         test1.get_json_object(query)
         #print test1.data['data']
         word_cloud = test1.get_object_words_all()

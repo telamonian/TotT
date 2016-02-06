@@ -60,9 +60,9 @@ class GetUrbanDictionaryInfo:
 if __name__ == '__main__':
     def main1():
         test1 = GetUrbanDictionaryInfo()
-        query = test1.make_query_complex(['happy','birthday'])
+        query = test1.make_query_complex(['shoelace'])
         test1.get_json_object(query)
-        definitions = test1.get_entry_definition_all()
+        definitions = test1.get_entry_tags()
         for x in definitions:
             print x
             print
