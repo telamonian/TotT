@@ -103,9 +103,17 @@
         <br>
         {% if gif %}
          <img src="{{ gif }}" alt="gif">
+        {% elif words %}
+         {% for w in words %}
+          <ol>{{ w }}</ol>
+         {% endfor %}
         {% else %}
          {% if error_message %}<p>{{ error_message }}</p>{% endif %}
-        <form class="form-inline" role="form" action="/search/" method="post">
+        {% if gifs %}
+         <form class="form-inline" role="form" action="/searchGif/" method="post">
+        {% else %}
+         <form class="form-inline" role="form" action="/search/" method="post">
+        {% endif %}
           {% csrf_token %}
           <div class="form-group">
             <label for="sub_words">Enter some words:</label>
