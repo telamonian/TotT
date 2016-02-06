@@ -9,7 +9,7 @@ advantage of the API of the Memegenerator
 import urllib2
 import json
 
-class get_meme_info:
+class GetMemeInfo:
     def __init__(self):
         return
 
@@ -51,7 +51,7 @@ class get_meme_info:
 
 if __name__ == '__main__':
     def main1():
-        test1 = get_meme_info()
+        test1 = GetMemeInfo()
         query = test1.make_query_simple('happy')
         test1.get_json_object(query)
         for x in test1.search_results:
