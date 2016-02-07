@@ -1,6 +1,7 @@
 import numpy as np
 
 from container import ContainerDict
+from GetGIFs import Giffy
 from GetUrbanDictionary import UrbanDictionary
 from thesaurus import Thesaurus
 
@@ -26,6 +27,10 @@ class TrickInits(object):
         return 'moby_thesaurus', Thesaurus(mobyThesaurusFPath, **kwargs)
 
     @classmethod
+    def initGiffy(cls, **kwargs):
+        return 'giffy', Giffy(**kwargs)
+
+    @classmethod
     def initUrbanDictionary(cls, **kwargs):
         return 'urban_dictionary', UrbanDictionary(**kwargs)
 
@@ -34,6 +39,12 @@ class BagOfTricks(ContainerDict):
         self.container = TrickInits._getTrickDict(**kwargs)
 
     def getCounter(self, *queries, **kwargs):
+        '''
+        valid kwargs:
+        depth: global control for depth of main search. default 3 (returns query + children + grandchildren)
+        normalizeTop: number of top results to normalize over. default 20
+        popQueries: remove the queries from the final return counter. default True
+        '''
         return np.sum([trick.getCounter(*queries, **kwargs) for trick in self.values() if trick.active])
 
     def setActive(self, active=True, name=None):
@@ -49,6 +60,6 @@ if __name__=='__main__':
 
     bot = BagOfTricks()
 
-    counter = t.getCounter(*words)
-    print counter.most_common(5)
+    counter = bot.getCounter(*words, printTop=20)
+    print counter.most_common(20)
     # [('felicitous', 97), ('appropriate', 96), ('good', 92), ('fit', 90), ('fitting', 90)]

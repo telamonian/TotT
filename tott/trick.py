@@ -9,9 +9,11 @@ thisDirPath = os.path.dirname(os.path.realpath(__file__))
 nltk.data.path.append(thisDirPath)
 
 from container import ContainerSet
+from helper import timewith
 
 class Trick(object):
     filterSet = set(stopwords.words('english')) | {'gif'}
+    normalizeTop = 20
 
     @classmethod
     def filter(cls, container):
@@ -45,12 +47,27 @@ class Trick(object):
 
     def getCounter(self, *queries, **kwargs):
         depth = kwargs['depth'] if 'depth' in kwargs else self.depth
+        normalizeTop = kwargs['normalizeTop'] if 'normalizeTop' in kwargs else self.normalizeTop
+        printTop = kwargs['printTop'] if 'printTop' in kwargs else False
         popQueries = kwargs['popQueries'] if 'popQueries' in kwargs else True
 
         counter = np.sum([cloud.getCounter() for cloud in self.getClouds(*queries, depth=depth)])
+
         if popQueries:
             [counter.pop(query) for query in queries]
         self.filter(counter)
+
+        if printTop:
+            print counter.most_common(printTop)
+
+        if normalizeTop:
+            counts = np.array(counter.values())
+            mean = np.mean(counts)
+            std = np.std(counts)
+            zscore = (counts - mean)/std
+            for i,key in enumerate(counter.iterkeys()):
+                counter[key] = zscore[i]
+
         return counter
 
     def getSet(self, *queries, **kwargs):
