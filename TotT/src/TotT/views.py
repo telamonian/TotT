@@ -24,15 +24,16 @@ class SearchPage(generic.TemplateView):
     template_name = "search.html"
 
     def get_context_data(self, **kwargs):
-        context = {'initForm': 1,}
+        context = {'initForm': 1, 'optRange': range(5,21),}
         return context
 
     def post(self, request, *args, **kwargs):
         words = WordForm(request.POST)
         if words.is_valid():
+            num_word = words.cleaned_data["numWord"]
             counter = t.getCounter(*words.get_list())
-            word_list = [x[0] for x in counter.most_common(20)]
-            word_count = [x[1] for x in counter.most_common(20)]
+            word_list = [x[0] for x in counter.most_common(num_word)]
+            word_count = [x[1] for x in counter.most_common(num_word)]
             conX={'gifs':0, }
             if words.cleaned_data["gif_bool"]==True:
                 gif=GetGifInfo()
@@ -47,7 +48,7 @@ class SearchPage(generic.TemplateView):
                 conX['wordCount']=word_count
             return render(request, 'search.html', conX)
         else:
-            return render(request, 'search.html', {'error_message': "Please type in some words", 'initForm': 1, })
+            return render(request, 'search.html', {'error_message': "Please type in some words", 'initForm': 1,  'optRange': range(5,21),})
 
 
 class ResultsPage(generic.TemplateView):

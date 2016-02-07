@@ -72,9 +72,20 @@ $( document ).ready(function() {
                   </div>
                   <div id="collapse1" class="panel-collapse collapse">
                     <ul class="list-group">
-                      <li class="list-group-item">Urban Dictionary<input type="checkbox" class="form-control" id="urban_bool" name="urban_bool"></li>
+                      <li class="list-group-item"><label for="urban_bool">Urban Dictionary</label><input type="checkbox" class="form-control" id="urban_bool" name="urban_bool"></li>
                       <li class="list-group-item">MThesaur<input type="checkbox" class="form-control" id="mthe_bool" name="mthe_bool" checked></li>
                       <li class="list-group-item">Giphy<input type="checkbox" class="form-control" id="gif_bool" name="gif_bool"></li>
+                      <li class="list-group-item"><label for="numWord"># of Words to display</label>
+                        <select id="numWord" name="numWord">
+                          {% for i in optRange %}
+                          {% if i == 10 %}
+                          <option value="{{ i }}" selected="">{{ i }}</option>
+                          {% else %}
+                          <option value="{{ i }}">{{ i }}</option>
+                          {% endif %}
+                          {% endfor %}
+                        </select>
+                      </li>
                     </ul>
                   </div>
                 </div>
