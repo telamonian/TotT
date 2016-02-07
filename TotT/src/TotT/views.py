@@ -31,8 +31,8 @@ class SearchPage(generic.TemplateView):
         words = WordForm(request.POST)
         if words.is_valid():
             counter = t.getCounter(*words.get_list())
-            word_list = [x[0] for x in counter.most_common(5)]
-            word_count = [x[1] for x in counter.most_common(5)]
+            word_list = [x[0] for x in counter.most_common(20)]
+            word_count = [x[1] for x in counter.most_common(20)]
             conX={'gifs':0, }
             if words.cleaned_data["gif_bool"]==True:
                 gif=GetGifInfo()

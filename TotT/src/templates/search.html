@@ -9,94 +9,102 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 $( document ).ready(function() {
-    var data = {
-        labels: {{ words }},
-        datasets: [
-          {
-              label: "Related Words",
-              fillColor: "rgba(151,187,205,0.2)",
-              strokeColor: "rgba(151,187,205,1)",
-              pointColor: "rgba(151,187,205,1)",
-              pointStrokeColor: "#fff",
-              pointHighlightFill: "#fff",
-              pointHighlightStroke: "rgba(151,187,205,1)",
-              data: {{ wordCount }}
-          }
-      ]
+  var data = {
+    labels: {{ words }},
+    datasets: [
+      {
+      label: "Related Words",
+      fillColor: "rgba(151,187,205,0.2)",
+      strokeColor: "rgba(151,187,205,1)",
+      pointColor: "rgba(151,187,205,1)",
+      pointStrokeColor: "#fff",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba(151,187,205,1)",
+      data: {{ wordCount }}
+      }
+    ]
   };
-    var ctx = document.getElementById("myChart").getContext("2d");
-    var myRadarChart = new Chart(ctx).Radar(data);
+  var ctx = document.getElementById("myChart").getContext("2d");
+  var myRadarChart = new Chart(ctx).Radar(data);
 });
 </script>
 {% endautoescape %}
 {% endblock %}
 
-    {% block container %}
-    <div class="container">
+{% block container %}
+<div class="container">
+  <div class="starter-template">
+    <h1>What is it you're thinking of?</h1>
+    <br>
 
-      <div class="starter-template">
-        <h1>What is it you're thinking of?</h1>
-        <br>
-        {% if gif %}
-         <img src="{{ gif }}" alt="gif">
-         {% endif %}
-        {% if words %}
-         {% for w in words %}
-          <ol>{{ w }}</ol>
-         {% endfor %}
-         <canvas id="myChart" width="400" height="400"></canvas>
-         {% endif %}
-         {% if error_message %}<p>{{ error_message }}</p>{% endif %}
-         {% if initForm %}
-         <form class="form-inline" role="form" action="/search/" method="post">
-          {% csrf_token %}
-          <div class="form-group">
-            <label for="sub_words">Enter some words:</label>
+    {% if words %}
+      <canvas id="myChart" width="400" height="400"></canvas>
+    {% endif %}
+
+    {% if gif %}
+      <img src="{{ gif }}" alt="gif">
+    {% endif %}
+
+    {% if words %}
+      {% for w in words %}
+        <ol>{{ w }}</ol>
+      {% endfor %}
+    {% endif %}
+
+    {% if error_message %}
+      <p>{{ error_message }}</p>
+    {% endif %}
+
+    {% if initForm %}
+      <form class="form-inline" role="form" action="/search/" method="post">
+      {% csrf_token %}
+        <div class="form-group">
+          <label for="sub_words">Enter some words:</label>
             <input type="text" class="form-control" id="sub_words" name="sub_words" placeholder="awesome, exciting, wonderful">
             <br>
             <div class="container">
-  <div class="panel-group">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse1">Search Options</a>
-        </h4>
+              <div class="panel-group">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" href="#collapse1">Search Options</a>
+                    </h4>
+                  </div>
+                  <div id="collapse1" class="panel-collapse collapse">
+                    <ul class="list-group">
+                      <li class="list-group-item">Urban Dictionary<input type="checkbox" class="form-control" id="urban_bool" name="urban_bool"></li>
+                      <li class="list-group-item">MThesaur<input type="checkbox" class="form-control" id="mthe_bool" name="mthe_bool" checked></li>
+                      <li class="list-group-item">Giphy<input type="checkbox" class="form-control" id="gif_bool" name="gif_bool"></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <button type="submit" class="btn btn-default" name="search_thesaurus">Submit</button>
+      </form>
+    {% endif %}
+  </div>
+
+</div><!-- /.container -->
+{% endblock container %}
+
+<!-- Site footer -->
+{% block footer %}
+<!-- Some social button for contact will do -->
+<a name="contact"></a>
+<div class="container">
+  <div class="footer">
+    <div class="row">
+      <div class="col-lg-6">
+        <p>&copy; Company {% now 'Y' %}</p>
       </div>
-      <div id="collapse1" class="panel-collapse collapse">
-        <ul class="list-group">
-          <li class="list-group-item">Urban Dictionary<input type="checkbox" class="form-control" id="urban_bool" name="urban_bool"></li>
-          <li class="list-group-item">MThesaur<input type="checkbox" class="form-control" id="mthe_bool" name="mthe_bool" checked></li>
-          <li class="list-group-item">Giphy<input type="checkbox" class="form-control" id="gif_bool" name="gif_bool"></li>
-        </ul>
+      <div class="col-lg-6 text-right">
+        Connect with us on
+        <a href="#"><i class="fa fa-facebook"></i> Facebook</a> or
+        <a href="#"><i class="fa fa-twitter"></i> Twitter</a>
       </div>
     </div>
   </div>
 </div>
-          </div>
-          <button type="submit" class="btn btn-default" name="search_thesaurus">Submit</button>
-        </form>
-        {% endif %}
-      </div>
-
-    </div><!-- /.container -->
-    {% endblock container %}
-
-    <!-- Site footer -->
-    {% block footer %}
-      <!-- Some social button for contact will do -->
-      <a name="contact"></a>
-      <div class="container">
-            <div class="footer">
-        <div class="row">
-          <div class="col-lg-6">
-              <p>&copy; Company {% now 'Y' %}</p>
-          </div>
-          <div class="col-lg-6 text-right">
-            Connect with us on
-            <a href="#"><i class="fa fa-facebook"></i> Facebook</a> or
-            <a href="#"><i class="fa fa-twitter"></i> Twitter</a>
-          </div>
-        </div>
-            </div>
-      </div>
-    {% endblock %}
+{% endblock %}
