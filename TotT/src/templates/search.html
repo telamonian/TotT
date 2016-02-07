@@ -34,54 +34,76 @@ $( document ).ready(function() {
 {% block container %}
 <div class="container">
   <div class="starter-template">
-    <h1>What is it you're thinking of?</h1>
-    <br>
+    {% if words == None %}
+      <h1>What is it you're thinking of?</h1>
+    {% endif %}
 
     {% if words %}
-      <canvas id="myChart" width="400" height="400"></canvas>
+      <h1>Was it related to these words?</h1>
+      <div class="center-block">
+        <canvas id="myChart" width="350" height="350"></canvas>
+      </div>
+    {% endif %}
+
+    {% if words %}
+      <p><strong>The distance from the center represents the strength of the relationship between the printed word and the words you submitted. Here they are in a list:</strong></p>
+      <div class="center-block">
+        <p>
+        {% for w in words %}
+          {{ w }},
+        {% endfor %}
+        </p>
+      </div>
     {% endif %}
 
     {% if gif %}
-      <img src="{{ gif }}" alt="gif">
-    {% endif %}
-
-    {% if words %}
-      {% for w in words %}
-        <ol>{{ w }}</ol>
-      {% endfor %}
+      <p><strong>I was also told you like gifs, so here is the one most relating to your list of words:</strong></p>
+      <div class="center-block">
+        <img src="{{ gif }}" alt="gif">
+      </div>
     {% endif %}
 
     {% if error_message %}
       <p>{{ error_message }}</p>
+      <br>
     {% endif %}
 
     {% if initForm %}
-      <form class="form-inline" role="form" action="/search/" method="post">
-      {% csrf_token %}
+      <form class="form-horizontal" role="form" action="/search/" method="post">
+        {% csrf_token %}
         <div class="form-group">
-          <label for="sub_words">Enter some words:</label>
+          <label class="control-label col-md-2 col-md-offset-2" for="sub_words"><strong>Enter words:</strong></label>
+          <div class="col-md-4">
             <input type="text" class="form-control" id="sub_words" name="sub_words" placeholder="awesome, exciting, wonderful">
-            <br>
-            <div class="container">
-              <div class="panel-group">
-                <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <h4 class="panel-title">
-                      <a data-toggle="collapse" href="#collapse1">Search Options</a>
-                    </h4>
-                  </div>
-                  <div id="collapse1" class="panel-collapse collapse">
-                    <ul class="list-group">
-                      <li class="list-group-item">Urban Dictionary<input type="checkbox" class="form-control" id="urban_bool" name="urban_bool"></li>
-                      <li class="list-group-item">MThesaur<input type="checkbox" class="form-control" id="mthe_bool" name="mthe_bool" checked></li>
-                      <li class="list-group-item">Giphy<input type="checkbox" class="form-control" id="gif_bool" name="gif_bool"></li>
-                    </ul>
-                  </div>
-                </div>
+          </div>
+          <div class="col-md-1">
+          <button type="submit" class="btn btn-default" name="search_thesaurus">Submit</button>
+          </div>
+        </div>
+        <div class="container col-md-2 col-md-offset-5">
+          <div class="panel-group">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" href="#collapse1">Search Options</a>
+                </h4>
+              </div>
+              <div id="collapse1" class="panel-collapse collapse">
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <label type="checkbox-inline"><input type="checkbox" id="urban_bool" name="urban_bool">Urban Dictionary</label>
+                  </li>
+                  <li class="list-group-item">
+                    <label type="checkbox-inline"><input type="checkbox" id="mthe_bool" name="mthe_bool" checked>Thesaurus</label>
+                  </li>
+                  <li class="list-group-item">
+                    <label type="checkbox-inline"><input type="checkbox" id="gif_bool" name="gif_bool">Giphy</label>
+                    </li>
+                </ul>
               </div>
             </div>
           </div>
-        <button type="submit" class="btn btn-default" name="search_thesaurus">Submit</button>
+        </div>
       </form>
     {% endif %}
   </div>
