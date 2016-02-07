@@ -1,12 +1,13 @@
+from collections import Counter
 import numpy as np
 
 from container import ContainerDict
 from GetGIFs import Giffy
 from GetUrbanDictionary import UrbanDictionary
 from thesaurus import Thesaurus
-from os.path import dirname, join
+from time import sleep
 
-mobyThesaurusFPath = join(dirname(__file__),'mthesaur.txt')
+mobyThesaurusFPath = 'mthesaur.txt'
 
 class TrickInitsMetaclass(type):
     @property
@@ -25,7 +26,9 @@ class TrickInits(object):
 
     @classmethod
     def initMobyThesaurus(cls, **kwargs):
-        return 'moby_thesaurus', Thesaurus(mobyThesaurusFPath, **kwargs)
+        if 'mobyPath' not in kwargs:
+            kwargs['mobyPath'] = mobyThesaurusFPath
+        return 'moby_thesaurus', Thesaurus(**kwargs)
 
     @classmethod
     def initGiffy(cls, **kwargs):
@@ -46,21 +49,32 @@ class BagOfTricks(ContainerDict):
         normalizeTop: number of top results to normalize over. default 20
         popQueries: remove the queries from the final return counter. default True
         '''
-        return np.sum([trick.getCounter(*queries, **kwargs) for trick in self.values() if trick.active])
+        active = kwargs['active'] if 'active' in kwargs else []
+        if not active:
+            return Counter()
 
-    def setActive(self, active=True, name=None):
-        if name is None:
-            [trick.setActive(active=active) for trick in self]
-        else:
-            self[name].setActive(active=active)
+        return np.sum([trick.getCounter(*queries, **kwargs) for name,trick in self.items() if name in active])
 
 if __name__=='__main__':
-    words = ['happy',
-             'smile',
-             'lucky']
+    # words = ['happy',
+    #          'smile',
+    #          'lucky']
 
-    bot = BagOfTricks()
+    # words = ['joke',
+    #          'magic',
+    #          'ribald']
 
-    counter = bot.getCounter(*words, printTop=20)
-    print counter.most_common(20)
+    # words = ['red',
+    #          'bull']
+
+    words = ['your ',
+             'mom']
+
+    bot = BagOfTricks(mobyPath=mobyThesaurusFPath)
+
+    counter = bot.getCounter(*words, active=['moby_thesaurus', 'urban_dictionary'], printTop=20)
+    newWords = zip(*counter.most_common(20))[0]
+    for word in newWords:
+        print bot.getCounter(word, active=['giffy'], printTop=20).most_common(20)
+        sleep(1e-1)
     # [('felicitous', 97), ('appropriate', 96), ('good', 92), ('fit', 90), ('fitting', 90)]

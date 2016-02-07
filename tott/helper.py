@@ -1,6 +1,12 @@
+import re
 import time
 
 __all__ = ['timedec', 'timewith']
+
+spacerRe = re.compile(r'\s+')
+
+def sanitizeSpaceURL(url):
+    return '%20'.join(spacerRe.split(url))
 
 def timedec(f):
     '''

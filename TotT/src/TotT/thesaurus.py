@@ -6,9 +6,9 @@ from container import ContainerDict, ContainerSet
 from trick import Trick
 
 class Thesaurus(Trick, ContainerDict):
-    def __init__(self, fPath, **kwargs):
+    def __init__(self, mobyPath, **kwargs):
         Trick.__init__(self, **kwargs)
-        with open(str(fPath)) as f:
+        with open(str(mobyPath)) as f:
             self.container = OrderedDict([(wordList[0], set(wordList[1:])) for wordList in [line.strip().split(',') for line in f]])
 
 if __name__=='__main__':
