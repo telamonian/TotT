@@ -1,33 +1,19 @@
 
 __author__ = 'Henry'
 
-import urllib2
-import json
 from collections import Counter
+import json
+import urllib2
 
 class GetGifInfo:
     def __init__(self):
         return
 
-    def make_query_simple(self, word):
-        """
-        Make a query with a single word
-        Type must be a string
-        Will return an address used to search for the
-         gifs that fit the word
-        """
-        url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
-        url_frame2 = "&api_key=dc6zaTOxFJmzC"
-        return url_frame1 + word + url_frame2
-
-    def make_query_complex(self, words):
-        """
-        Same function as make_query_simple but accepts a list
-        """
-        url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
-        url_frame2 = "&api_key=dc6zaTOxFJmzC"
-        combo = "+".join(words)
-        return url_frame1 + combo + url_frame2
+    def convert_list_to_counter_dictionary(self,flat_list):
+        cnt = Counter()
+        for word in flat_list:
+            cnt[word] += 1
+        return cnt
 
     def get_json_object(self,query):
         """
@@ -122,11 +108,25 @@ class GetGifInfo:
         """
         return self.data['data'][line_num]['images']['original']['url']
 
-    def convert_list_to_counter_dictionary(self,flat_list):
-        cnt = Counter()
-        for word in flat_list:
-            cnt[word] += 1
-        return cnt
+    def make_query_simple(self, word):
+        """
+        Make a query with a single word
+        Type must be a string
+        Will return an address used to search for the
+         gifs that fit the word
+        """
+        url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
+        url_frame2 = "&api_key=dc6zaTOxFJmzC"
+        return url_frame1 + word + url_frame2
+
+    def make_query_complex(self, words):
+        """
+        Same function as make_query_simple but accepts a list
+        """
+        url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
+        url_frame2 = "&api_key=dc6zaTOxFJmzC"
+        combo = "+".join(words)
+        return url_frame1 + combo + url_frame2
 
 if __name__ == '__main__':
     def main1():

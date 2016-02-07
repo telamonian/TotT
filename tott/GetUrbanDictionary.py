@@ -5,12 +5,13 @@ import json
 import numpy as np
 import urllib2
 
-class GetUrbanDictionaryInfo:
-    def __init__(self, active=True):
-        self.active = active
+from trick import Trick
 
-    def get_counter_simple(self, *queries, **kwargs):
-        pass
+__all__ = ['GetUrbanDictionaryInfo', 'UrbanDictionary']
+
+class GetUrbanDictionaryInfo(object):
+    def __init__(self):
+        return
 
     def get_entry_tags(self):
         """
@@ -62,8 +63,20 @@ class GetUrbanDictionaryInfo:
         combo = "+".join(words)
         return url_frame1 + combo
 
+class UrbanDictionary(Trick, GetUrbanDictionaryInfo):
+    def __contains__(self, key):
+        return True
+
+    def __getitem__(self, key):
+        query = self.make_query_complex([key])
+        self.get_json_object(query)
+        return self.get_entry_tags()
 
 if __name__ == '__main__':
+    words = ['happy',
+             'smile',
+             'lucky']
+
     def main1():
         test1 = GetUrbanDictionaryInfo()
         query = test1.make_query_complex(['shoelace'])
@@ -74,4 +87,9 @@ if __name__ == '__main__':
             print
         return
 
-    main1()
+    def main2():
+        ud = UrbanDictionary()
+        counter = ud.getCounter(*words)
+        print counter.most_common(10)
+
+    main2()
