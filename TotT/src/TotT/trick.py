@@ -59,13 +59,13 @@ class Trick(object):
         if printTop:
             print counter.most_common(printTop)
 
-        if normalizeTop:
-            counts = np.array(counter.values())
-            mean = np.mean(counts)
-            std = np.std(counts)
-            zscore = (counts - mean)/std
-            for i,key in enumerate(counter.iterkeys()):
-                counter[key] = zscore[i]
+        counts = np.array(counter.values())
+        zscoreCounts = np.array(zip(*counter.most_common(normalizeTop))[1])
+        mean = np.mean(zscoreCounts)
+        std = np.std(zscoreCounts)
+        zscore = (counts - mean)/std
+        for i,key in enumerate(counter.iterkeys()):
+            counter[key] = zscore[i]
 
         return counter
 
