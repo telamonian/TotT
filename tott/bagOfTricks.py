@@ -4,6 +4,7 @@ from container import ContainerDict
 from GetGIFs import Giffy
 from GetUrbanDictionary import UrbanDictionary
 from thesaurus import Thesaurus
+from time import sleep
 
 mobyThesaurusFPath = 'mthesaur.txt'
 
@@ -64,13 +65,23 @@ if __name__=='__main__':
     #          'magic',
     #          'ribald']
 
-    words = ['red',
-             'bull']
+    # words = ['red',
+    #          'bull']
+
+    words = ['your ',
+             'mom']
 
     bot = BagOfTricks(mobyPath=mobyThesaurusFPath)
-    bot.setActive(False, 'moby_thesaurus')
+    # bot.setActive(False, 'moby_thesaurus')
+    bot.setActive(False, 'urban_dictionary')
     bot.setActive(False, 'giffy')
 
     counter = bot.getCounter(*words, printTop=20)
-    print counter.most_common(20)
+    newWords = zip(*counter.most_common(20))[0]
+    bot.setActive(False, 'moby_thesaurus')
+    bot.setActive(True, 'giffy')
+    for word in newWords:
+        print bot.getCounter(word, printTop=20).most_common(20)
+        sleep(1e-1)
+    # print counter.most_common(20)
     # [('felicitous', 97), ('appropriate', 96), ('good', 92), ('fit', 90), ('fitting', 90)]

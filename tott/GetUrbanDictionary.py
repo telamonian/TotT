@@ -6,6 +6,7 @@ import numpy as np
 import re
 import urllib2
 
+from helper import sanitizeSpaceURL
 from trick import Trick
 
 __all__ = ['GetUrbanDictionaryInfo', 'UrbanDictionary']
@@ -56,7 +57,7 @@ class GetUrbanDictionaryInfo(object):
          gifs that fit the word
         """
         url_frame1 = "http://api.urbandictionary.com/v0/define?term="
-        return '%20'.join(spacerRe.split(url_frame1 + word))
+        return sanitizeSpaceURL(url_frame1 + word)
 
     def make_query_complex(self, words):
         """
@@ -64,7 +65,7 @@ class GetUrbanDictionaryInfo(object):
         """
         url_frame1 = "http://api.urbandictionary.com/v0/define?term="
         combo = "+".join(words)
-        return '%20'.join(spacerRe.split(url_frame1 + combo))
+        return sanitizeSpaceURL(url_frame1 + combo)
 
 class UrbanDictionary(Trick, GetUrbanDictionaryInfo):
     def __contains__(self, key):
