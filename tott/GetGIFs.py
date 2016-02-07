@@ -25,13 +25,28 @@ class GetGifInfo:
         """
         return [ item for sublist in nested_info for item in sublist ]
 
-    def get_json_object(self,query):
+    def get_json_object_simple(self,query):
         """
         Accepts a query to make a data object
         """
         response = urllib2.urlopen(query)
         self.data = json.load(response)
         return
+
+
+    def get_json_object_complex(self,query_list):
+        """
+        Accepts a list of queries to make a data object
+        makes the data information
+        """
+        response1 = urllib2.urlopen(query_list[0])
+        self.data = json.load(response1)
+        for x in range(1,len(query_list)):
+            response = urllib2.urlopen(query_list[x])
+            holder = json.load(response)
+            self.data['data'] = self.data['data'] + holder['data']
+        return
+
 
     def get_object_words_all(self):
         """
@@ -128,8 +143,10 @@ class GetGifInfo:
         """
         url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
         url_frame2 = "&limit=100&api_key=dc6zaTOxFJmzC"
-        combo = "+".join(words)
-        return url_frame1 + combo + url_frame2
+        query_list = []
+        for x in words:
+            query_list.append(url_frame1 + x + url_frame2)
+        return query_list
 
 class Giffy(Trick, GetGifInfo):
     def __contains__(self, key):
@@ -137,7 +154,7 @@ class Giffy(Trick, GetGifInfo):
 
     def __getitem__(self, key):
         query = self.make_query_complex([key])
-        self.get_json_object(query)
+        self.get_json_object_complex(query)
         word_cloud = self.get_object_words_all()
         return self.flatten(word_cloud)
 
@@ -148,9 +165,9 @@ if __name__ == '__main__':
 
     def main1():
         test1 = GetGifInfo()
-        query = test1.make_query_simple('happy')
-        test1.get_json_object(query)
-        print len(test1.data['data'])
+        query_list = test1.make_query_complex(['happy','birthday'])
+        test1.get_json_object_complex(query_list)
+        #print len(test1.data['data'])
         #word_cloud = test1.get_object_words_all()
         #word_list = test1.flatten(word_cloud)
         #word_counter = test1.convert_list_to_counter_dictionary(word_list)

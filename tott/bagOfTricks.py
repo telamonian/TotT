@@ -24,7 +24,9 @@ class TrickInits(object):
 
     @classmethod
     def initMobyThesaurus(cls, **kwargs):
-        return 'moby_thesaurus', Thesaurus(mobyThesaurusFPath, **kwargs)
+        if 'mobyPath' not in kwargs:
+            kwargs['mobyPath'] = mobyThesaurusFPath
+        return 'moby_thesaurus', Thesaurus(**kwargs)
 
     @classmethod
     def initGiffy(cls, **kwargs):
@@ -58,7 +60,7 @@ if __name__=='__main__':
              'smile',
              'lucky']
 
-    bot = BagOfTricks()
+    bot = BagOfTricks(mobyPath=mobyThesaurusFPath)
 
     counter = bot.getCounter(*words, printTop=20)
     print counter.most_common(20)
