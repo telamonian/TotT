@@ -44,10 +44,10 @@ $( document ).ready(function() {
          {% for w in words %}
           <ol>{{ w }}</ol>
          {% endfor %}
-         {% endif %}
          <canvas id="myChart" width="400" height="400"></canvas>
-        {% else %}
+         {% endif %}
          {% if error_message %}<p>{{ error_message }}</p>{% endif %}
+         {% if initForm %}
          <form class="form-inline" role="form" action="/search/" method="post">
           {% csrf_token %}
           <div class="form-group">

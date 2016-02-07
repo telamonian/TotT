@@ -23,6 +23,10 @@ t=Thesaurus(join(dirname(__file__),'mthesaur.txt'))
 class SearchPage(generic.TemplateView):
     template_name = "search.html"
 
+    def get_context_data(self, **kwargs):
+        context = {'initForm': 1,}
+        return context
+
     def post(self, request, *args, **kwargs):
         words = WordForm(request.POST)
         if words.is_valid():
@@ -43,7 +47,7 @@ class SearchPage(generic.TemplateView):
                 conX['wordCount']=word_count
             return render(request, 'search.html', conX)
         else:
-            return render(request, 'search.html', {'error_message': "Please type in some words",})
+            return render(request, 'search.html', {'error_message': "Please type in some words", 'initForm': 1, })
 
 
 class ResultsPage(generic.TemplateView):
