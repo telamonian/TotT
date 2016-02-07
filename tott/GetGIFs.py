@@ -15,6 +15,13 @@ class GetGifInfo:
             cnt[word] += 1
         return cnt
 
+    def flatten(self,nested_info):
+        """
+        Function that accepts a nested list of lists and
+         returns a flattened list
+        """
+        return [ item for sublist in nested_info for item in sublist ]
+
     def get_json_object(self,query):
         """
         Accepts a query to make a data object
@@ -57,13 +64,6 @@ class GetGifInfo:
         """
         words = self.data['data'][linenum]['slug'].strip()
         return words.split('-')
-
-    def flatten(self,nested_info):
-        """
-        Function that accepts a nested list of lists and
-         returns a flattened list
-        """
-        return [ item for sublist in nested_info for item in sublist ]
 
     def get_image_info_all(self):
         """
