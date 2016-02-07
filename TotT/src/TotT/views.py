@@ -7,7 +7,7 @@ from .GetGIFs import GetGifInfo
 
 from .thesaurus import Thesaurus
 
-#import os
+from os.path import dirname, join
 
 '''
 class HomePage(generic.TemplateView):
@@ -16,8 +16,8 @@ class HomePage(generic.TemplateView):
 class AboutPage(generic.TemplateView):
     template_name = "about.html"
 '''
-#print(os.listdir("."))
-t=Thesaurus('TotT/mthesaur.txt')
+
+t=Thesaurus(join(dirname(__file__),'mthesaur.txt'))
 
 # views added by JRJ to develop further
 class SearchPage(generic.TemplateView):
@@ -27,11 +27,9 @@ class SearchPage(generic.TemplateView):
         words = WordForm(request.POST)
         if words.is_valid():
             counter = t.getCounter(*words.get_list())
-            l=[]
-            for i in counter.most_common(2):
-                l.append(i[0])
-            print(l)
-            conX={'gifs':0,}
+            word_list = [x[0] for x in counter.most_common(5)]
+            word_count = [x[1] for x in counter.most_common(5)]
+            conX={'gifs':0, }
             if words.cleaned_data["gif_bool"]==True:
                 gif=GetGifInfo()
                 q=gif.make_query_complex(words.get_list()[0])
@@ -41,7 +39,8 @@ class SearchPage(generic.TemplateView):
                 conX['gifs']=1
                 #return render(request, 'search.html', {'gif': imgDat, 'gifs': 1,})
             if words.cleaned_data["mthe_bool"]==True:
-                conX['words']=l
+                conX['words']=word_list
+                conX['wordCount']=word_count
             return render(request, 'search.html', conX)
         else:
             return render(request, 'search.html', {'error_message': "Please type in some words",})
