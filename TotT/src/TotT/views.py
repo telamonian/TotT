@@ -7,6 +7,7 @@ from .GetGIFs import GetGifInfo
 
 from .thesaurus import Thesaurus
 
+from os.path import dirname, join
 
 '''
 class HomePage(generic.TemplateView):
@@ -16,7 +17,7 @@ class AboutPage(generic.TemplateView):
     template_name = "about.html"
 '''
 
-t=Thesaurus('TotT/mthesaur.txt')
+t=Thesaurus(join(dirname(__file__),'mthesaur.txt'))
 
 # views added by JRJ to develop further
 class SearchPage(generic.TemplateView):
