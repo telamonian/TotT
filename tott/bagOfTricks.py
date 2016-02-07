@@ -1,3 +1,4 @@
+from collections import Counter
 import numpy as np
 
 from container import ContainerDict
@@ -48,13 +49,11 @@ class BagOfTricks(ContainerDict):
         normalizeTop: number of top results to normalize over. default 20
         popQueries: remove the queries from the final return counter. default True
         '''
-        return np.sum([trick.getCounter(*queries, **kwargs) for trick in self.values() if trick.active])
+        active = kwargs['active'] if 'active' in kwargs else []
+        if not active:
+            return Counter()
 
-    def setActive(self, active=True, name=None):
-        if name is None:
-            [trick.setActive(active=active) for trick in self]
-        else:
-            self[name].setActive(active=active)
+        return np.sum([trick.getCounter(*queries, **kwargs) for name,trick in self.items() if name in active])
 
 if __name__=='__main__':
     # words = ['happy',
@@ -72,16 +71,10 @@ if __name__=='__main__':
              'mom']
 
     bot = BagOfTricks(mobyPath=mobyThesaurusFPath)
-    # bot.setActive(False, 'moby_thesaurus')
-    bot.setActive(False, 'urban_dictionary')
-    bot.setActive(False, 'giffy')
 
-    counter = bot.getCounter(*words, printTop=20)
+    counter = bot.getCounter(*words, active=['moby_thesaurus', 'urban_dictionary'], printTop=20)
     newWords = zip(*counter.most_common(20))[0]
-    bot.setActive(False, 'moby_thesaurus')
-    bot.setActive(True, 'giffy')
     for word in newWords:
-        print bot.getCounter(word, printTop=20).most_common(20)
+        print bot.getCounter(word, active=['giffy'], printTop=20).most_common(20)
         sleep(1e-1)
-    # print counter.most_common(20)
     # [('felicitous', 97), ('appropriate', 96), ('good', 92), ('fit', 90), ('fitting', 90)]

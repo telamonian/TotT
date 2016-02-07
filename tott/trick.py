@@ -24,7 +24,6 @@ class Trick(object):
         [container.pop(word) for word in filterWords]
 
     def __init__(self, **kwargs):
-        self.setActive(kwargs['active'] if 'active' in kwargs else True)
         self.depth = kwargs['depth'] if 'depth' in kwargs else 3
 
     def getCloud(self, query, depth=3):
@@ -76,9 +75,6 @@ class Trick(object):
         retSet = set.intersection(*[cloud.getSet() for cloud in self.getClouds(*queries, depth=depth)])
         self.filter(retSet)
         return retSet
-
-    def setActive(self, active=True):
-        self.active = active
 
 class Cloud(ContainerSet):
     def __init__(self, *layers):
