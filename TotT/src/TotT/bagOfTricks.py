@@ -56,11 +56,20 @@ class BagOfTricks(ContainerDict):
             self[name].setActive(active=active)
 
 if __name__=='__main__':
-    words = ['happy',
-             'smile',
-             'lucky']
+    # words = ['happy',
+    #          'smile',
+    #          'lucky']
+
+    # words = ['joke',
+    #          'magic',
+    #          'ribald']
+
+    words = ['red',
+             'bull']
 
     bot = BagOfTricks(mobyPath=mobyThesaurusFPath)
+    bot.setActive(False, 'moby_thesaurus')
+    bot.setActive(False, 'giffy')
 
     counter = bot.getCounter(*words, printTop=20)
     print counter.most_common(20)

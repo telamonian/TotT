@@ -59,9 +59,11 @@ class SearchPage(generic.TemplateView):
                 conX['gif']=imgDat
                 conX['gifs']=1
                 #return render(request, 'search.html', {'gif': imgDat, 'gifs': 1,})
-            if words.cleaned_data["mthe_bool"]==True or words.cleaned_data["urban_bool"]==True:
+            if (words.cleaned_data["mthe_bool"]==True or words.cleaned_data["urban_bool"]==True) and len(word_list)!=0:
                 conX['words']=word_list
                 conX['wordCount']=word_count
+            elif len(word_list)==0:
+                return render(request, 'search.html', {'error_message': "No responses. Please use different words or settings", 'initForm': 1,  'optRange': range(5,21),})
             return render(request, 'search.html', conX)
         else:
             return render(request, 'search.html', {'error_message': "Please type in some words", 'initForm': 1,  'optRange': range(5,21),})

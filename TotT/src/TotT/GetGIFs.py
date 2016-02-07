@@ -33,6 +33,13 @@ class GetGifInfo:
         self.data = json.load(response)
         return
 
+    def get_json_object_final(self,query):
+        """
+        Accepts a query to make a data object
+        """
+        response = urllib2.urlopen(query)
+        data = json.load(response)
+        return data
 
     def get_json_object_complex(self,query_list):
         """
@@ -148,6 +155,29 @@ class GetGifInfo:
             query_list.append(url_frame1 + x + url_frame2)
         return query_list
 
+    def make_query_final(self,word_list):
+        url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
+        url_frame2 = "&limit=100&api_key=dc6zaTOxFJmzC"
+        combo = ','.join(word_list)
+        return url_frame1 + combo + url_frame2
+
+    def pick_final_images(self,word_list):
+        final_urls = []
+        end = -1
+        while end != 0:
+            query = self.make_query_final(word_list)
+            data = self.get_json_object_final(query)
+            if len(data['data']) > 1:
+                end = 0
+                for x in data['data']:
+                    final_urls.append(x['images']['original']['url'])
+            elif len(data['data']) == 0:
+                word_list.pop(-1)
+
+            if len(word_list) == 0:
+                end = 0
+        return
+
 class Giffy(Trick, GetGifInfo):
     def __contains__(self, key):
         return True
@@ -165,8 +195,9 @@ if __name__ == '__main__':
 
     def main1():
         test1 = GetGifInfo()
-        query_list = test1.make_query_complex(['happy','birthday'])
-        test1.get_json_object_complex(query_list)
+        query_list = test1.make_query_simple('jovial')
+        test1.get_json_object_simple(query_list)
+        test1.pick_final_images(['happy','rictus'])
         #print len(test1.data['data'])
         #word_cloud = test1.get_object_words_all()
         #word_list = test1.flatten(word_cloud)
