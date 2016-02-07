@@ -59,6 +59,9 @@ class Trick(object):
         if printTop:
             print counter.most_common(printTop)
 
+        if len(counter) < 1:
+            return counter
+
         counts = np.array(counter.values())
         zscoreCounts = np.array(zip(*counter.most_common(normalizeTop))[1])
         mean = np.mean(zscoreCounts)
