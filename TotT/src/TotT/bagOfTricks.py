@@ -4,9 +4,8 @@ from container import ContainerDict
 from GetGIFs import Giffy
 from GetUrbanDictionary import UrbanDictionary
 from thesaurus import Thesaurus
-from os.path import dirname, join
 
-mobyThesaurusFPath = join(dirname(__file__),'mthesaur.txt')
+mobyThesaurusFPath = 'mthesaur.txt'
 
 class TrickInitsMetaclass(type):
     @property
@@ -25,7 +24,9 @@ class TrickInits(object):
 
     @classmethod
     def initMobyThesaurus(cls, **kwargs):
-        return 'moby_thesaurus', Thesaurus(mobyThesaurusFPath, **kwargs)
+        if 'mobyPath' not in kwargs:
+            kwargs['mobyPath'] = mobyThesaurusFPath
+        return 'moby_thesaurus', Thesaurus(**kwargs)
 
     @classmethod
     def initGiffy(cls, **kwargs):
@@ -59,7 +60,7 @@ if __name__=='__main__':
              'smile',
              'lucky']
 
-    bot = BagOfTricks()
+    bot = BagOfTricks(mobyPath=mobyThesaurusFPath)
 
     counter = bot.getCounter(*words, printTop=20)
     print counter.most_common(20)

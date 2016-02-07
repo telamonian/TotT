@@ -20,7 +20,7 @@ class AboutPage(generic.TemplateView):
 '''
 
 #t=Thesaurus(join(dirname(__file__),'mthesaur.txt'))
-bag=BagOfTricks(popQueries=False)
+bag=BagOfTricks(mobyPath=join(dirname(__file__),'mthesaur.txt'))
 
 # views added by JRJ to develop further
 class SearchPage(generic.TemplateView):
@@ -34,25 +34,23 @@ class SearchPage(generic.TemplateView):
         words = WordForm(request.POST)
         if words.is_valid():
             num_word = words.cleaned_data["numWord"]
-            print("broke before counter")
             bag.setActive(active=words.cleaned_data["urban_bool"], name="urban_dictionary")
+            bag.setActive(active=words.cleaned_data["mthe_bool"], name="moby_thesaurus")
             bag.setActive(active=False, name="giffy")
             counter = bag.getCounter(*words.get_list())
-            print("got here")
-            word_list = [x[0] for x in counter.most_common(num_word)]
-            print("print list")
+            word_list = [x[0].encode('ascii','ignore') for x in counter.most_common(num_word)]
             word_count = [x[1] for x in counter.most_common(num_word)]
-            print("print count")
+            print(word_count)
             conX={'gifs':0, }
             if words.cleaned_data["gif_bool"]==True:
                 gif=GetGifInfo()
-                q=gif.make_query_complex(words.get_list()[0])
-                gif.get_json_object(q)
+                q=gif.make_query_simple(words.get_list()[0])
+                gif.get_json_object_simple(q)
                 imgDat=gif.get_gif_url_original_size_one(0)
                 conX['gif']=imgDat
                 conX['gifs']=1
                 #return render(request, 'search.html', {'gif': imgDat, 'gifs': 1,})
-            if words.cleaned_data["mthe_bool"]==True:
+            if words.cleaned_data["mthe_bool"]==True or words.cleaned_data["urban_bool"]==True:
                 conX['words']=word_list
                 conX['wordCount']=word_count
             return render(request, 'search.html', conX)
