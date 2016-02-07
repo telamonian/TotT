@@ -36,7 +36,8 @@ class Trick(object):
             for wordSet in cloud[i]:
                 for word in wordSet:
                     if word in self:
-                        wordSets.append(set(self[word]))
+                        wordSets.append(set([s.encode('ascii','ignore') if isinstance(s, unicode) else s for s in self[word]]))
+                        # wordSets.append(set(self[word]))
             cloud.append(Layer(*wordSets))
         return cloud
 

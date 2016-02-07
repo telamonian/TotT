@@ -61,6 +61,8 @@ if __name__=='__main__':
              'lucky']
 
     bot = BagOfTricks(mobyPath=mobyThesaurusFPath)
+    bot.setActive(False, 'moby_thesaurus')
+    bot.setActive(False, 'giffy')
 
     counter = bot.getCounter(*words, printTop=20)
     print counter.most_common(20)
