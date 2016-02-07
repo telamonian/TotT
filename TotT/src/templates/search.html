@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block extrahead %}
+{% autoescape off %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$( document ).ready(function() {
+  var data = {
+    labels: {{ words }},
+    datasets: [
+      {
+      label: "Related Words",
+      fillColor: "rgba(151,187,205,0.2)",
+      strokeColor: "rgba(151,187,205,1)",
+      pointColor: "rgba(151,187,205,1)",
+      pointStrokeColor: "#fff",
+      pointHighlightFill: "#fff",
+      pointHighlightStroke: "rgba(151,187,205,1)",
+      data: {{ wordCount }}
+      }
+    ]
+  };
+  var ctx = document.getElementById("myChart").getContext("2d");
+  var myRadarChart = new Chart(ctx).Radar(data);
+});
+</script>
+{% endautoescape %}
+{% endblock %}
+
+{% block container %}
+<div class="container">
+  <div class="starter-template">
+    {% if words == None %}
+      <h1>What is it you are thinking of?</h1>
+    {% endif %}
+
+    {% if words %}
+      <h1>Was it related to these words?</h1>
+      <div class="container col-md-6">
+        <canvas id="myChart" width="400" height="400"></canvas>
+      </div>
+    {% endif %}
+
+    {% if words %}
+      <div class="container col-md-6" align="left" column-count="2">
+      <p><strong>The distance from the center represents the strength of the relationship between the printed word and the words you submitted. Here they are in a list:</strong></p>
+        <ul>
+        {% for w in words %}
+          <li>{{ w }}</li>
+        {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% if gif %}
+      <div class="container col-md-6" align="left">
+      <p><strong>I was also told you like gifs, so here is the one most relating to your list of words...</strong></p>
+      </div>
+      <div class="container col-md-6" align="center">
+        <img src="{{ gif }}" alt="gif">
+      </div>
+    {% endif %}
+
+    {% if error_message %}
+      <p>{{ error_message }}</p>
+      <br>
+    {% endif %}
+
+    {% if initForm %}
+      <form class="form-horizontal" role="form" action="/search/" method="post" align="left">
+        {% csrf_token %}
+        <div class="form-group">
+          <label class="control-label col-md-2 col-md-offset-2" for="sub_words"><strong>Enter words:</strong></label>
+          <div class="col-md-4">
+            <input type="text" class="form-control" id="sub_words" name="sub_words" placeholder="something, awesome, exciting, wonderful, ebullient">
+          </div>
+          <div class="col-md-1">
+          <button type="submit" class="btn btn-default" name="search_thesaurus">Submit</button>
+          </div>
+        </div>
+        <div class="container col-md-3 col-md-offset-4">
+          <div class="panel-group">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" href="#collapse1">Search Options</a>
+                </h4>
+              </div>
+              <div id="collapse1" class="panel-collapse collapse">
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <label type="checkbox-inline"><input type="checkbox" id="urban_bool" name="urban_bool">Urban Dictionary</label>
+                  </li>
+                  <li class="list-group-item">
+                    <label type="checkbox-inline"><input type="checkbox" id="mthe_bool" name="mthe_bool" checked>Thesaurus</label>
+                  </li>
+                  <li class="list-group-item">
+                    <label type="checkbox-inline"><input type="checkbox" id="gif_bool" name="gif_bool">Giphy</label>
+                  </li>
+                  <li class="list-group-item"><label for="numWord"># of Words to display</label>
+                    <select id="numWord" name="numWord">
+                      {% for i in optRange %}
+                      {% if i == 10 %}
+                      <option value="{{ i }}" selected="">{{ i }}</option>
+                      {% else %}
+                      <option value="{{ i }}">{{ i }}</option>
+                      {% endif %}
+                      {% endfor %}
+                    </select>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    {% endif %}
+  </div>
+
+</div><!-- /.container -->
+{% endblock container %}
+
+<!-- Site footer -->
+{% block footer %}
+<!-- Some social button for contact will do -->
+<a name="contact"></a>
+<div class="container">
+  <div class="footer">
+    <div class="row">
+      <div class="col-lg-6">
+        <p>Coded by H. Lessen, M. Matyszewski, J. Jeliazkov, and M. Klein for <a href="https://hophacks.com/">HopHacks</a></p>
+      </div>
+      <div class="col-lg-6 text-right">
+        Find us on
+        <a href="https://github.com/telamonian/TotT"><i class="fa fa-github"></i> GitHub</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
