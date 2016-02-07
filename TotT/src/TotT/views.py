@@ -11,6 +11,8 @@ from .bagOfTricks import BagOfTricks
 
 from os.path import dirname, join
 
+import random
+
 '''
 class HomePage(generic.TemplateView):
     template_name = "home.html"
@@ -44,9 +46,16 @@ class SearchPage(generic.TemplateView):
             conX={'gifs':0, }
             if words.cleaned_data["gif_bool"]==True:
                 gif=GetGifInfo()
-                q=gif.make_query_simple(words.get_list()[0])
-                gif.get_json_object_simple(q)
-                imgDat=gif.get_gif_url_original_size_one(0)
+                print(word_list[0:3])
+                q=gif.make_query_complex(word_list[0:3])
+                gif.get_json_object_complex(q)
+                imgDat=gif.get_gif_url_original_size_all()
+                if len(imgDat)<5:
+                    gif2=GetGifInfo()
+                    q2=gif2.make_query_complex(words.get_list())
+                    gif2.make_query_complex(q2)
+                    imgDat=gif2.get_gif_url_original_size_all()
+                imgDat=random.choice(imgDat)
                 conX['gif']=imgDat
                 conX['gifs']=1
                 #return render(request, 'search.html', {'gif': imgDat, 'gifs': 1,})
