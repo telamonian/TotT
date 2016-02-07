@@ -36,15 +36,20 @@ class SearchPage(generic.TemplateView):
         words = WordForm(request.POST)
         if words.is_valid():
             num_word = words.cleaned_data["numWord"]
-            bag.setActive(active=words.cleaned_data["urban_bool"], name="urban_dictionary")
+            '''bag.setActive(active=words.cleaned_data["urban_bool"], name="urban_dictionary")
             bag.setActive(active=words.cleaned_data["mthe_bool"], name="moby_thesaurus")
-            bag.setActive(active=False, name="giffy")
-            counter = bag.getCounter(*words.get_list())
+            bag.setActive(active=False, name="giffy")'''
+            activeList=[]
+            if words.cleaned_data["urban_bool"]:
+                activeList.append("urban_dictionary")
+            if words.cleaned_data["mthe_bool"]:
+                activeList.append("moby_thesaurus")
+            counter = bag.getCounter(*words.get_list(), active=activeList)
             word_list = [x[0].encode('ascii','ignore') for x in counter.most_common(num_word)]
             word_count = [x[1] for x in counter.most_common(num_word)]
             print(word_count)
             conX={'gifs':0, }
-            if words.cleaned_data["gif_bool"]==True:
+            if words.cleaned_data["gif_bool"]==True and len(word_list)>=3:
                 gif=GetGifInfo()
                 print(word_list[0:3])
                 q=gif.make_query_complex(word_list[0:3])
@@ -55,9 +60,12 @@ class SearchPage(generic.TemplateView):
                     q2=gif2.make_query_complex(words.get_list())
                     gif2.make_query_complex(q2)
                     imgDat=gif2.get_gif_url_original_size_all()
-                imgDat=random.choice(imgDat)
-                conX['gif']=imgDat
-                conX['gifs']=1
+                if len(imgDat)==0:
+                    conX['error_message']= "No Gifs"
+                else:
+                    imgDat=random.choice(imgDat)
+                    conX['gif']=imgDat
+                    conX['gifs']=1
                 #return render(request, 'search.html', {'gif': imgDat, 'gifs': 1,})
             if (words.cleaned_data["mthe_bool"]==True or words.cleaned_data["urban_bool"]==True) and len(word_list)!=0:
                 conX['words']=word_list

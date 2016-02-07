@@ -4,6 +4,7 @@ from collections import Counter
 import json
 import urllib2
 
+from helper import sanitizeSpaceURL
 from trick import Trick
 
 __all__ = ['GetGifInfo', 'Giffy']
@@ -142,7 +143,7 @@ class GetGifInfo:
         """
         url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
         url_frame2 = "&limit=100&api_key=dc6zaTOxFJmzC"
-        return url_frame1 + word + url_frame2
+        return sanitizeSpaceURL(url_frame1 + word + url_frame2)
 
     def make_query_complex(self, words):
         """
@@ -152,14 +153,14 @@ class GetGifInfo:
         url_frame2 = "&limit=100&api_key=dc6zaTOxFJmzC"
         query_list = []
         for x in words:
-            query_list.append(url_frame1 + x + url_frame2)
+            query_list.append(sanitizeSpaceURL(url_frame1 + x + url_frame2))
         return query_list
 
     def make_query_final(self,word_list):
         url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
         url_frame2 = "&limit=100&api_key=dc6zaTOxFJmzC"
         combo = ','.join(word_list)
-        return url_frame1 + combo + url_frame2
+        return sanitizeSpaceURL(url_frame1 + combo + url_frame2)
 
     def pick_final_images(self,word_list):
         final_urls = []
