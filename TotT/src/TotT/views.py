@@ -5,7 +5,9 @@ from .forms import WordForm
 
 from .GetGIFs import GetGifInfo
 
-from .thesaurus import Thesaurus
+from .bagOfTricks import BagOfTricks
+
+#from .thesaurus import Thesaurus
 
 from os.path import dirname, join
 
@@ -17,7 +19,8 @@ class AboutPage(generic.TemplateView):
     template_name = "about.html"
 '''
 
-t=Thesaurus(join(dirname(__file__),'mthesaur.txt'))
+#t=Thesaurus(join(dirname(__file__),'mthesaur.txt'))
+bag=BagOfTricks(popQueries=False)
 
 # views added by JRJ to develop further
 class SearchPage(generic.TemplateView):
@@ -31,9 +34,15 @@ class SearchPage(generic.TemplateView):
         words = WordForm(request.POST)
         if words.is_valid():
             num_word = words.cleaned_data["numWord"]
-            counter = t.getCounter(*words.get_list())
+            print("broke before counter")
+            bag.setActive(active=words.cleaned_data["urban_bool"], name="urban_dictionary")
+            bag.setActive(active=False, name="giffy")
+            counter = bag.getCounter(*words.get_list())
+            print("got here")
             word_list = [x[0] for x in counter.most_common(num_word)]
+            print("print list")
             word_count = [x[1] for x in counter.most_common(num_word)]
+            print("print count")
             conX={'gifs':0, }
             if words.cleaned_data["gif_bool"]==True:
                 gif=GetGifInfo()
