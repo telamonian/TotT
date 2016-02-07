@@ -119,7 +119,7 @@ class GetGifInfo:
          gifs that fit the word
         """
         url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
-        url_frame2 = "&api_key=dc6zaTOxFJmzC"
+        url_frame2 = "&limit=100&api_key=dc6zaTOxFJmzC"
         return url_frame1 + word + url_frame2
 
     def make_query_complex(self, words):
@@ -127,7 +127,7 @@ class GetGifInfo:
         Same function as make_query_simple but accepts a list
         """
         url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
-        url_frame2 = "&api_key=dc6zaTOxFJmzC"
+        url_frame2 = "&limit=100&api_key=dc6zaTOxFJmzC"
         combo = "+".join(words)
         return url_frame1 + combo + url_frame2
 
@@ -148,16 +148,17 @@ if __name__ == '__main__':
 
     def main1():
         test1 = GetGifInfo()
-        query = test1.make_query_simple('mom')
+        query = test1.make_query_simple('happy')
         test1.get_json_object(query)
-        #print test1.data['data']
-        word_cloud = test1.get_object_words_all()
-        word_list = test1.flatten(word_cloud)
-        word_counter = test1.convert_list_to_counter_dictionary(word_list)
-        for x in word_counter:
-            print x
-            print word_counter[x]
-        return
+        print len(test1.data['data'])
+        #word_cloud = test1.get_object_words_all()
+        #word_list = test1.flatten(word_cloud)
+        #word_counter = test1.convert_list_to_counter_dictionary(word_list)
+
+        #for x in word_counter:
+        #    print x
+        #    print word_counter[x]
+        #return
 
     def main2():
         g = Giffy()
@@ -165,4 +166,4 @@ if __name__ == '__main__':
         print counter.most_common(5)
         # [(u'movie', 52), (u'love', 51), (u'justin', 40), (u'funny', 40), (u'art', 34)]
 
-    main2()
+    main1()
