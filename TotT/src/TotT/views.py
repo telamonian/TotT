@@ -5,7 +5,9 @@ from .forms import WordForm
 
 from .GetGIFs import GetGifInfo
 
-from .thesaurus import Thesaurus
+from .bagOfTricks import BagOfTricks
+
+#from .thesaurus import Thesaurus
 
 from os.path import dirname, join
 
@@ -17,22 +19,30 @@ class AboutPage(generic.TemplateView):
     template_name = "about.html"
 '''
 
-t=Thesaurus(join(dirname(__file__),'mthesaur.txt'))
+#t=Thesaurus(join(dirname(__file__),'mthesaur.txt'))
+bag=BagOfTricks(popQueries=False)
 
 # views added by JRJ to develop further
 class SearchPage(generic.TemplateView):
     template_name = "search.html"
 
     def get_context_data(self, **kwargs):
-        context = {'initForm': 1,}
+        context = {'initForm': 1, 'optRange': range(5,21),}
         return context
 
     def post(self, request, *args, **kwargs):
         words = WordForm(request.POST)
         if words.is_valid():
-            counter = t.getCounter(*words.get_list())
-            word_list = [x[0] for x in counter.most_common(20)]
-            word_count = [x[1] for x in counter.most_common(20)]
+            num_word = words.cleaned_data["numWord"]
+            print("broke before counter")
+            bag.setActive(active=words.cleaned_data["urban_bool"], name="urban_dictionary")
+            bag.setActive(active=False, name="giffy")
+            counter = bag.getCounter(*words.get_list())
+            print("got here")
+            word_list = [x[0] for x in counter.most_common(num_word)]
+            print("print list")
+            word_count = [x[1] for x in counter.most_common(num_word)]
+            print("print count")
             conX={'gifs':0, }
             if words.cleaned_data["gif_bool"]==True:
                 gif=GetGifInfo()
@@ -47,7 +57,7 @@ class SearchPage(generic.TemplateView):
                 conX['wordCount']=word_count
             return render(request, 'search.html', conX)
         else:
-            return render(request, 'search.html', {'error_message': "Please type in some words", 'initForm': 1, })
+            return render(request, 'search.html', {'error_message': "Please type in some words", 'initForm': 1,  'optRange': range(5,21),})
 
 
 class ResultsPage(generic.TemplateView):

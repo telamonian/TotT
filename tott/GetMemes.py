@@ -8,6 +8,7 @@ advantage of the API of the Memegenerator
 
 import urllib2
 import json
+from collections import Counter
 
 class GetMemeInfo:
     def __init__(self):
@@ -76,14 +77,49 @@ class GetMemeInfo:
             names.append(x[1])
         return names
 
+    def get_words_from_names(self,name_list):
+        """
+        Breaks the title into a list of words
+         input is the output of get_image_name_all
+         output is a nested list of strings
+        """
+        words = []
+        for name in name_list:
+            name = name.strip()
+            temp = name.split()
+            temp = [ x.strip() for x in temp ]
+            words.append(temp)
+        return words
+
+    def flatten(self,nested_info):
+        """
+        Function that accepts a nested list of lists and
+         returns a flattened list
+        """
+        return [ item for sublist in nested_info for item in sublist ]
+
+    def convert_list_to_counter_dictionary(self,flat_list):
+        """
+        Converts flat list into a counter dictionary useful for
+        Bag of Tricks
+        """
+        cnt = Counter()
+        for word in flat_list:
+            cnt[word] += 1
+        return cnt
+
 if __name__ == '__main__':
     def main1():
         test1 = GetMemeInfo()
         query = test1.make_query_simple('happy')
         test1.get_json_object(query)
-        names = test1.get_image_url_all()
-        for x in names:
+        names = test1.get_image_name_all()
+        words1 = test1.get_words_from_names(names)
+        names2 = test1.flatten(words1)
+        words2 = test1.convert_list_to_counter_dictionary(names2)
+        for x in words2:
             print x
+            print words2[x]
  #       for x in rankedurls:
 #            print x
             #print

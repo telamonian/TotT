@@ -1,32 +1,29 @@
-
 __author__ = 'Henry'
 
-import urllib2
+from collections import Counter
 import json
+import urllib2
+
+from trick import Trick
+
+__all__ = ['GetGifInfo', 'Giffy']
 
 class GetGifInfo:
     def __init__(self):
         return
 
-    def make_query_simple(self, word):
-        """
-        Make a query with a single word
-        Type must be a string
-        Will return an address used to search for the
-         gifs that fit the word
-        """
-        url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
-        url_frame2 = "&api_key=dc6zaTOxFJmzC"
-        return url_frame1 + word + url_frame2
+    def convert_list_to_counter_dictionary(self,flat_list):
+        cnt = Counter()
+        for word in flat_list:
+            cnt[word] += 1
+        return cnt
 
-    def make_query_complex(self, words):
+    def flatten(self,nested_info):
         """
-        Same function as make_query_simple but accepts a list
+        Function that accepts a nested list of lists and
+         returns a flattened list
         """
-        url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
-        url_frame2 = "&api_key=dc6zaTOxFJmzC"
-        combo = "+".join(words)
-        return url_frame1 + combo + url_frame2
+        return [ item for sublist in nested_info for item in sublist ]
 
     def get_json_object(self,query):
         """
@@ -71,13 +68,6 @@ class GetGifInfo:
         words = self.data['data'][linenum]['slug'].strip()
         return words.split('-')
 
-    def flatten(self,nested_info):
-        """
-        Function that accepts a nested list of lists and
-         returns a flattened list
-        """
-        return [ item for sublist in nested_info for item in sublist ]
-
     def get_image_info_all(self):
         """
         returns the image dictionary from Giphy API
@@ -121,14 +111,59 @@ class GetGifInfo:
         """
         return self.data['data'][line_num]['images']['original']['url']
 
+    def make_query_simple(self, word):
+        """
+        Make a query with a single word
+        Type must be a string
+        Will return an address used to search for the
+         gifs that fit the word
+        """
+        url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
+        url_frame2 = "&limit=100&api_key=dc6zaTOxFJmzC"
+        return url_frame1 + word + url_frame2
+
+    def make_query_complex(self, words):
+        """
+        Same function as make_query_simple but accepts a list
+        """
+        url_frame1 = "http://api.giphy.com/v1/gifs/search?q="
+        url_frame2 = "&limit=100&api_key=dc6zaTOxFJmzC"
+        combo = "+".join(words)
+        return url_frame1 + combo + url_frame2
+
+class Giffy(Trick, GetGifInfo):
+    def __contains__(self, key):
+        return True
+
+    def __getitem__(self, key):
+        query = self.make_query_complex([key])
+        self.get_json_object(query)
+        word_cloud = self.get_object_words_all()
+        return self.flatten(word_cloud)
+
 if __name__ == '__main__':
+    words = ['happy',
+             'smile',
+             'lucky']
+
     def main1():
         test1 = GetGifInfo()
-        query = test1.make_query_simple('snoopy')
+        query = test1.make_query_simple('happy')
         test1.get_json_object(query)
-        #print test1.data['data']
-        word_cloud = test1.get_gif_url_original_size_one(0)
-        print word_cloud
-        return
+        print len(test1.data['data'])
+        #word_cloud = test1.get_object_words_all()
+        #word_list = test1.flatten(word_cloud)
+        #word_counter = test1.convert_list_to_counter_dictionary(word_list)
+
+        #for x in word_counter:
+        #    print x
+        #    print word_counter[x]
+        #return
+
+    def main2():
+        g = Giffy()
+        counter = g.getCounter(*words)
+        print counter.most_common(5)
+        # [(u'movie', 52), (u'love', 51), (u'justin', 40), (u'funny', 40), (u'art', 34)]
 
     main1()

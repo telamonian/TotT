@@ -80,7 +80,7 @@ $( document ).ready(function() {
           <button type="submit" class="btn btn-default" name="search_thesaurus">Submit</button>
           </div>
         </div>
-        <div class="container col-md-2 col-md-offset-5">
+        <div class="container col-md-3 col-md-offset-4">
           <div class="panel-group">
             <div class="panel panel-default">
               <div class="panel-heading">
@@ -98,7 +98,18 @@ $( document ).ready(function() {
                   </li>
                   <li class="list-group-item">
                     <label type="checkbox-inline"><input type="checkbox" id="gif_bool" name="gif_bool">Giphy</label>
-                    </li>
+                  </li>
+                  <li class="list-group-item"><label for="numWord"># of Words to display</label>
+                    <select id="numWord" name="numWord">
+                      {% for i in optRange %}
+                      {% if i == 10 %}
+                      <option value="{{ i }}" selected="">{{ i }}</option>
+                      {% else %}
+                      <option value="{{ i }}">{{ i }}</option>
+                      {% endif %}
+                      {% endfor %}
+                    </select>
+                  </li>
                 </ul>
               </div>
             </div>
