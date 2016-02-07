@@ -35,30 +35,32 @@ $( document ).ready(function() {
 <div class="container">
   <div class="starter-template">
     {% if words == None %}
-      <h1>What is it you're thinking of?</h1>
+      <h1>What is it you are thinking of?</h1>
     {% endif %}
 
     {% if words %}
       <h1>Was it related to these words?</h1>
-      <div class="center-block">
-        <canvas id="myChart" width="350" height="350"></canvas>
+      <div class="container col-md-6">
+        <canvas id="myChart" width="400" height="400"></canvas>
       </div>
     {% endif %}
 
     {% if words %}
+      <div class="container col-md-6" align="left" column-count="2">
       <p><strong>The distance from the center represents the strength of the relationship between the printed word and the words you submitted. Here they are in a list:</strong></p>
-      <div class="center-block">
-        <p>
+        <ul>
         {% for w in words %}
-          {{ w }},
+          <li>{{ w }}</li>
         {% endfor %}
-        </p>
+        </ul>
       </div>
     {% endif %}
 
     {% if gif %}
-      <p><strong>I was also told you like gifs, so here is the one most relating to your list of words:</strong></p>
-      <div class="center-block">
+      <div class="container col-md-6" align="left">
+      <p><strong>I was also told you like gifs, so here is the one most relating to your list of words...</strong></p>
+      </div>
+      <div class="container col-md-6" align="center">
         <img src="{{ gif }}" alt="gif">
       </div>
     {% endif %}
@@ -69,12 +71,12 @@ $( document ).ready(function() {
     {% endif %}
 
     {% if initForm %}
-      <form class="form-horizontal" role="form" action="/search/" method="post">
+      <form class="form-horizontal" role="form" action="/search/" method="post" align="left">
         {% csrf_token %}
         <div class="form-group">
           <label class="control-label col-md-2 col-md-offset-2" for="sub_words"><strong>Enter words:</strong></label>
           <div class="col-md-4">
-            <input type="text" class="form-control" id="sub_words" name="sub_words" placeholder="awesome, exciting, wonderful">
+            <input type="text" class="form-control" id="sub_words" name="sub_words" placeholder="something, awesome, exciting, wonderful, ebullient">
           </div>
           <div class="col-md-1">
           <button type="submit" class="btn btn-default" name="search_thesaurus">Submit</button>
@@ -130,12 +132,11 @@ $( document ).ready(function() {
   <div class="footer">
     <div class="row">
       <div class="col-lg-6">
-        <p>&copy; Company {% now 'Y' %}</p>
+        <p>Coded by H. Lessen, M. Matyszewski, J. Jeliazkov, and M. Klein for <a href="https://hophacks.com/">HopHacks</a></p>
       </div>
       <div class="col-lg-6 text-right">
-        Connect with us on
-        <a href="#"><i class="fa fa-facebook"></i> Facebook</a> or
-        <a href="#"><i class="fa fa-twitter"></i> Twitter</a>
+        Find us on
+        <a href="https://github.com/telamonian/TotT"><i class="fa fa-github"></i> GitHub</a>
       </div>
     </div>
   </div>
