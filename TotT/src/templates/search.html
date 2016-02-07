@@ -40,27 +40,24 @@ $( document ).ready(function() {
 
     {% if words %}
       <h1>Was it related to these words?</h1>
-      <div class="container col-md-6">
-        <canvas id="myChart" width="400" height="400"></canvas>
+      <p><strong>You searched for words relating to: </strong>{{oldWords}}.</p>
+      <div class="container col-md-12">
+        <canvas id="myChart" width="500" height="500"></canvas>
       </div>
     {% endif %}
 
     {% if words %}
-      <div class="container col-md-6" align="left" column-count="2">
-      <p><strong>The distance from the center represents the strength of the relationship between the printed word and the words you submitted. Here they are in a list:</strong></p>
-        <ul>
-        {% for w in words %}
-          <li>{{ w }}</li>
-        {% endfor %}
-        </ul>
+      <div class="container col-md-12" align="left" column-count="2">
+        <p>The distance from the center represents the strength of the relationship between the printed word and the words you submitted.</p>
+        <p><strong>Here they are in a list:</strong> {{newWords}}</p>
       </div>
     {% endif %}
 
     {% if gif %}
-      <div class="container col-md-6" align="left">
+      <div class="container col-md-12" align="left">
       <p><strong>I was also told you like gifs, so here is the one most relating to your list of words...</strong></p>
       </div>
-      <div class="container col-md-6" align="center">
+      <div class="container col-md-12" align="center">
         <img src="{{ gif }}" alt="gif">
       </div>
     {% endif %}

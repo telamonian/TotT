@@ -48,7 +48,7 @@ class SearchPage(generic.TemplateView):
             word_list = [x[0].encode('ascii','ignore') for x in counter.most_common(num_word)]
             word_count = [x[1] for x in counter.most_common(num_word)]
             print(word_count)
-            conX={'gifs':0, }
+            conX={'gifs':0, 'oldWords':", ".join(words.get_list()),}
             if words.cleaned_data["gif_bool"]==True and len(word_list)>=3:
                 gif=GetGifInfo()
                 print(word_list[0:3])
@@ -69,6 +69,7 @@ class SearchPage(generic.TemplateView):
                 #return render(request, 'search.html', {'gif': imgDat, 'gifs': 1,})
             if (words.cleaned_data["mthe_bool"]==True or words.cleaned_data["urban_bool"]==True) and len(word_list)!=0:
                 conX['words']=word_list
+                conX['newWords']=", ".join(word_list)
                 conX['wordCount']=word_count
             elif len(word_list)==0:
                 return render(request, 'search.html', {'error_message': "No responses. Please use different words or settings", 'initForm': 1,  'optRange': range(5,21),})
