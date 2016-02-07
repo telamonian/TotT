@@ -11,6 +11,34 @@
   {% endif %}
 {% endblock %}
 
+{% block extrahead %}
+{% autoescape off %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$( document ).ready(function() {
+    var data = {
+        labels: {{ words }},
+        datasets: [
+          {
+              label: "My Second dataset",
+              fillColor: "rgba(151,187,205,0.2)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              pointStrokeColor: "#fff",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "rgba(151,187,205,1)",
+              data: {{ wordCount }}
+          }
+      ]
+  };
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var myRadarChart = new Chart(ctx).Radar(data);
+});
+</script>
+{% endautoescape %}
+{% endblock %}
+
     {% block container %}
     <div class="container">
 
@@ -23,6 +51,7 @@
          {% for w in words %}
           <ol>{{ w }}</ol>
          {% endfor %}
+         <canvas id="myChart" width="400" height="400"></canvas>
         {% else %}
          {% if error_message %}<p>{{ error_message }}</p>{% endif %}
         {% if gifs %}
