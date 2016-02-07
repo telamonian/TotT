@@ -49,6 +49,6 @@ if __name__=='__main__':
 
     bot = BagOfTricks()
 
-    counter = bot.getCounter(*words, depth=3)
-    print counter.most_common(10)
+    counter = t.getCounter(*words)
+    print counter.most_common(5)
     # [('felicitous', 97), ('appropriate', 96), ('good', 92), ('fit', 90), ('fitting', 90)]

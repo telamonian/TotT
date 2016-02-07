@@ -1,10 +1,26 @@
 from collections import Counter
 from itertools import chain
+import nltk
+from nltk.corpus import stopwords
 import numpy as np
+import os
+
+thisDirPath = os.path.dirname(os.path.realpath(__file__))
+nltk.data.path.append(thisDirPath)
 
 from container import ContainerSet
 
 class Trick(object):
+    filterSet = set(stopwords.words('english')) | {'gif'}
+
+    @classmethod
+    def filter(cls, container):
+        filterWords = []
+        for word in container:
+            if word in cls.filterSet:
+                filterWords.append(word)
+        [container.pop(word) for word in filterWords]
+
     def __init__(self, **kwargs):
         self.setActive(kwargs['active'] if 'active' in kwargs else True)
         self.depth = kwargs['depth'] if 'depth' in kwargs else 3
@@ -34,12 +50,15 @@ class Trick(object):
         counter = np.sum([cloud.getCounter() for cloud in self.getClouds(*queries, depth=depth)])
         if popQueries:
             [counter.pop(query) for query in queries]
+        self.filter(counter)
         return counter
 
     def getSet(self, *queries, **kwargs):
         depth = kwargs['depth'] if 'depth' in kwargs else self.depth
 
-        return set.intersection(*[cloud.getSet() for cloud in self.getClouds(*queries, depth=depth)])
+        retSet = set.intersection(*[cloud.getSet() for cloud in self.getClouds(*queries, depth=depth)])
+        self.filter(retSet)
+        return retSet
 
     def setActive(self, active=True):
         self.active = active

@@ -1,9 +1,12 @@
-
 __author__ = 'Henry'
 
 from collections import Counter
 import json
 import urllib2
+
+from trick import Trick
+
+__all__ = ['GetGifInfo', 'Giffy']
 
 class GetGifInfo:
     def __init__(self):
@@ -128,7 +131,21 @@ class GetGifInfo:
         combo = "+".join(words)
         return url_frame1 + combo + url_frame2
 
+class Giffy(Trick, GetGifInfo):
+    def __contains__(self, key):
+        return True
+
+    def __getitem__(self, key):
+        query = self.make_query_complex([key])
+        self.get_json_object(query)
+        word_cloud = self.get_object_words_all()
+        return self.flatten(word_cloud)
+
 if __name__ == '__main__':
+    words = ['happy',
+             'smile',
+             'lucky']
+
     def main1():
         test1 = GetGifInfo()
         query = test1.make_query_simple('mom')
@@ -142,4 +159,10 @@ if __name__ == '__main__':
             print word_counter[x]
         return
 
-    main1()
+    def main2():
+        g = Giffy()
+        counter = g.getCounter(*words)
+        print counter.most_common(5)
+        # [(u'movie', 52), (u'love', 51), (u'justin', 40), (u'funny', 40), (u'art', 34)]
+
+    main2()

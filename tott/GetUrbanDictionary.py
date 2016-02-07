@@ -91,5 +91,6 @@ if __name__ == '__main__':
         ud = UrbanDictionary()
         counter = ud.getCounter(*words)
         print counter.most_common(10)
+        # [(u'funny', 19), (u'amazing', 19), (u'awesome', 18), (u'beautiful', 17), (u'sexy', 16), (u'hot', 13), (u'cool', 13), (u'sex', 12), (u'love', 8), (u'sweet', 7)]
 
     main2()
