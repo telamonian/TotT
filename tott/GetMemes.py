@@ -1,4 +1,3 @@
-
 __author__ = 'Henry'
 
 """
@@ -6,9 +5,11 @@ This contains a class that will allow the user to take
 advantage of the API of the Memegenerator
 """
 
-import urllib2
-import json
 from collections import Counter
+import json
+import urllib2
+
+from helper import sanitizeSpaceURL
 
 class GetMemeInfo:
     def __init__(self):
@@ -23,7 +24,7 @@ class GetMemeInfo:
         """
         url_frame1 = 'http://version1.api.memegenerator.net/Generators_Search?q='
         url_frame2 = '&pageIndex=0&pageSize=12'
-        return url_frame1 + word + url_frame2
+        return sanitizeSpaceURL(url_frame1 + word + url_frame2)
 
     def make_query_complex(self, words):
         """
@@ -32,7 +33,7 @@ class GetMemeInfo:
         url_frame1 = 'http://version1.api.memegenerator.net/Generators_Search?q='
         url_frame2 = '&pageIndex=0&pageSize=12'
         combo = "+".join(words)
-        return url_frame1 + combo + url_frame2
+        return sanitizeSpaceURL(url_frame1 + combo + url_frame2)
 
     def get_json_object(self,query):
         """
