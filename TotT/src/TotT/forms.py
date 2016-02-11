@@ -9,5 +9,6 @@ class WordForm(forms.Form):
 
     def get_list(self):
         s=self.cleaned_data['sub_words']
+        s=s.lower()
         l=s.replace(","," ").split()
         return l

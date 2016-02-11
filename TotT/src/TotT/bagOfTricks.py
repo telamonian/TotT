@@ -70,7 +70,7 @@ class BagOfTricks(ContainerDict):
 if __name__=='__main__':
     words = ['happy',
              'smile',
-             'lucky']
+             'purple']
 
     # words = ['joke',
     #          'magic',
