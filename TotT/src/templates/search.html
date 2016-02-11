@@ -29,12 +29,19 @@ $( document ).ready(function() {
     type:'radar',
     data: data,
       options: {
-        // for the data line
+        // options that affect the data line on the radial chart
         elements: {
           line: {
-            borderWidth: 10,
+            // line width
+            borderWidth: 1.5,
             // controls the curve/smoothing of the data line. 0 is none
-            tension:.1
+            tension: 0
+          },
+          point: {
+            // width of white border around points
+            borderWidth: 3,
+            // point raidus
+            radius: 6
           }
         },
         legend: {
