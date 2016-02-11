@@ -1,17 +1,12 @@
 from django.views import generic
 from django.shortcuts import render
-
-from .forms import WordForm
-
-from .GetGIFs import GetGifInfo
+import numpy as np
+from os.path import dirname, join
+import random
 
 from .bagOfTricks import BagOfTricks
-
-#from .thesaurus import Thesaurus
-
-from os.path import dirname, join
-
-import random
+from .forms import WordForm
+from .GetGIFs import GetGifInfo
 
 '''
 class HomePage(generic.TemplateView):
@@ -47,6 +42,9 @@ class SearchPage(generic.TemplateView):
             counter = bag.getCounter(*words.get_list(), active=activeList)
             word_list = [x[0].encode('ascii','ignore') for x in counter.most_common(num_word)]
             word_count = [x[1] for x in counter.most_common(num_word)]
+            if words.cleaned_data["urban_bool"]==False and words.cleaned_data["mthe_bool"]==False:
+                word_list=words.get_list()
+                word_list.append("")
             print(word_count)
             conX={'gifs':0, 'oldWords':", ".join(words.get_list()),}
             if words.cleaned_data["gif_bool"]==True and len(word_list)>=3:
@@ -71,6 +69,10 @@ class SearchPage(generic.TemplateView):
                 conX['words']=word_list
                 conX['newWords']=", ".join(word_list)
                 conX['wordCount']=word_count
+                conX['wordCountMax']=np.max(word_count)
+                conX['wordCountMin']=np.min(word_count)
+                conX['wordCountRange']=np.diff([np.floor(conX['wordCountMin']), np.ceil(conX['wordCountMax'])]) + 1
+                print(conX['wordCountMin'], conX['wordCountMax'], conX['wordCountRange'])
             elif len(word_list)==0:
                 return render(request, 'search.html', {'error_message': "No responses. Please use different words or settings", 'initForm': 1,  'optRange': range(5,21),})
             return render(request, 'search.html', conX)
